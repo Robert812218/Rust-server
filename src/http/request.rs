@@ -1,3 +1,4 @@
+use super::method::{Method, MethodError}
 use std::str::Utf8Error;
 use std::io::Read;
 use std::convert::TryFrom;
@@ -25,9 +26,11 @@ impl TryFrom<&[u8]> for Request {
     let (protocol, _) = get_next_word(request).ok_or(ParseError::InvalidRequest)?;
 
     if protocol != "HTTP/1.1" {
-      return Err(ParseError::InvalidProtocol)
+      return Err(ParseError::InvalidProtocol);
     }
   }
+
+  let method: Method = method.parse()?;
 
   match get_next_word(request) {
     Some((method, request)) => {},
@@ -73,6 +76,12 @@ impl ParseError {
       Self::InvalidProtocol => "InvalidProtocol",
       Self::InvalidMethod => "InvalidMethod",          
     }
+  }
+}
+
+impl From<MethodError> for ParseError {
+  fn from(_: MethodError) -> Self {
+    Self::InvalidMethod
   }
 }
 
