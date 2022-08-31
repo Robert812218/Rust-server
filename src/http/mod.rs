@@ -4,6 +4,8 @@ pub use request::ParseError;
 
 pub mod request;
 pub mod method;
+pub mod query_string::{QueryString, Value as QueryStringValue};
+pub use super::{QueryString, as QueryStringValue};
 
 #[stable(feature = "rust1", since = "1.0.0")]
 pub fn from_utf8<'a>(v: &'a [u8]) -> Result(<&'a str, Utf8Error>) {
