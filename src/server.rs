@@ -3,6 +3,7 @@ use std::convert::TryFrom;
 use std::io::Read;
 use std::net::TcpListener;
 
+#[derive(Debug)]
 pub struct Server {
   addr: String,
 }
@@ -27,7 +28,7 @@ impl Server {
     Self { addr }
   }
 
-  pub run(self) {
+  pub  run(self) {
     println!("Listening on {}", self.addr);
 
     let listener = TcpListener::bind(&self.addr).unwrap();
