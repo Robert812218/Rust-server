@@ -42,14 +42,20 @@ impl Server {
                println!("Received a request: {}", String::from_utf8_lossy(&buffer));
 
                let response = match request::try_from(&buffer[..]) {
+                // Ok(request) => {
+                //   dbg!(request);
+                //   let response = Response::new(StatusCode::Ok, Some("<h1>IT WORKS</h1>".to_string()));
+                //   response.send(&mut stream);
+                // }
+                // Err(e) => {
+                //   println!("Failed to parse request: {}", e);
+                //   Response::new(StatusCode::BadRequest, None).send(&mut stream);
+                // }
                 Ok(request) => {
-                  dbg!(request);
-                  let response = Response::new(StatusCode::Ok, Some("<h1>IT WORKS</h1>".to_string()));
-                  response.send(&mut stream);
+                  handler.handle_request(&request)
                 }
                 Err(e) => {
-                  println!("Failed to parse request: {}", e);
-                  Response::new(StatusCode::BadRequest, None).send(&mut stream);
+                  handler.handle_bad_request(e: &ParseError)
                 }
                };
 
